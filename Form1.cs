@@ -20,15 +20,17 @@ namespace Gla
         public Form1()
         {
             InitializeComponent();
-            images = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.png");
+            //images = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.png");
         }
 
-        private void pictureBox1_Click(object sender, MouseEventArgs e)
+        private void pictureBox1_MouseWheel(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            this.Text = e.Delta.ToString();
+            if (pictureBox1.Image != null)
             {
-                MessageBox.Show("R");
+                //pictureBox1.Load(pictureBox1.Image.Size / e.Delta);
             }
+
         }
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
@@ -38,11 +40,12 @@ namespace Gla
                 try
                 {
                     pictureBox1.Load(openFileDialog1.FileName);
-                    MessageBox.Show("W " + pictureBox1.Image.Width + " H " + pictureBox1.Image.Height);
                     this.Text = "Glance at " + Path.GetFullPath(openFileDialog1.FileName);
                 }
                 catch
                 {
+                    pictureBox1.Image = null;
+                    this.Text = "Glance";
                     MessageBox.Show("Неверный формат файла.");
                 }
             }
@@ -50,10 +53,15 @@ namespace Gla
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // MessageBox.Show(Application.ExecutablePath); <- photo
-            if (!Application.ExecutablePath.EndsWith("exe"))
+            var args = Environment.GetCommandLineArgs();
+            if (args.Length > 1)
             {
-                pictureBox1.Load(Application.ExecutablePath);
+                var img = args[args.Length - 1];
+                if (File.Exists(img))
+                {
+                    pictureBox1.Load(img);
+                    this.Text = "Glance at " + Path.GetFullPath(img);
+                }
             }
         }
     }
