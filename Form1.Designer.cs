@@ -68,7 +68,7 @@ namespace Gla
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.Filter = "Image (*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*";
+            this.openFileDialog1.Filter = "Image (*.BMP;*.JPG;*.JPEG;*.GIF;*.PNG)|*.BMP;**.JPG;*.JPEG;*.GIF;*.PNG|All files (*.*)|*.*";
             this.openFileDialog1.Title = "Выбрать изображение";
             // 
             // Form1
