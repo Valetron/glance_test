@@ -17,42 +17,49 @@ namespace Gla
         private int curIndexImage = 0;
         private string[] files;
         private static string[] extensions = { "jpg", "jpeg", "png", "gif", "bmp" };
+        private static int scale = 0;
 
         public Form1()
         {
             InitializeComponent();
         }
 
+        private Image Zoom()
+        {
+            Bitmap newImg = new Bitmap(pictureBox1.Image, pictureBox1.Image.Width * 10, pictureBox1.Image.Height * 10);
+            Graphics gr = Graphics.FromImage(pictureBox1.Image);
+            gr.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            //pictureBox1.Image = newImg;
+            return newImg;
+        }
+
         private void pictureBox1_MouseWheel(object sender, MouseEventArgs e)
         {
             if (ModifierKeys == Keys.Shift && e.Delta == 120) // zoom in
             {
-                MessageBox.Show("Zoom in");
+                //MessageBox.Show("Zoom in");
+                pictureBox1.Width += 5;
+                pictureBox1.Height += 5;
             }
             else if (ModifierKeys == Keys.Shift && e.Delta == -120) // zoom out
             {
-                MessageBox.Show("Zoom out");
+                pictureBox1.Width-=5;
+                pictureBox1.Height-=5;
             }
-            else if (ModifierKeys == Keys.Control && e.Delta == 120) // show next
+            else if (ModifierKeys == Keys.Control && e.Delta == 120 && pictureBox1.Image != null) // show next
             {
                 if (curIndexImage == files.Length - 1) { curIndexImage = 0; }
                 else { curIndexImage++; }
                 pictureBox1.Load(files[curIndexImage]);
                 this.Text = "Glance at " + files[curIndexImage];
             }
-            else if (ModifierKeys == Keys.Control && e.Delta == -120) // show prev
+            else if (ModifierKeys == Keys.Control && e.Delta == -120 && pictureBox1.Image != null) // show prev
             {
                 if (curIndexImage == 0) { curIndexImage = files.Length - 1; }
                 else { curIndexImage--; }
                 pictureBox1.Load(files[curIndexImage]);
                 this.Text = "Glance at " + files[curIndexImage];
-            }
-            /*this.Text = e.Delta.ToString();
-            if (pictureBox1.Image != null)
-            {
-                //pictureBox1.Load(pictureBox1.Image.Size / e.Delta);
-            }*/
-
+            }  
         }
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
@@ -102,10 +109,7 @@ namespace Gla
                     }
                 }
             }
-            else
-            {
-                files = GetFiles(Directory.GetCurrentDirectory());
-            }
+            else { files = GetFiles(Directory.GetCurrentDirectory()); }
         }
     }
 }
